@@ -1,15 +1,16 @@
 const popupElement = document.querySelector('.popup');
 const editButton = document.querySelector('.profile__edit-button');
 const closePopupButton = popupElement.querySelector('.popup__close');
-const nameFormElement = popupElement.querySelector('#name')
-const jobFormElement = popupElement.querySelector('#job')
-const submitFrom = popupElement.querySelector('.popup__submit')
-console.log(document.querySelector('.profile__name').textContent);
-console.log(nameFormElement);
+const nameFormPopupElement = popupElement.querySelector('#name');
+const jobFormEPopuplement = popupElement.querySelector('#job');
+const submitFrom = popupElement.querySelector('.popup__submit');
+
+const nameElement = document.querySelector('.profile__name');
+const jobElement = document.querySelector('.profile__occupation');
 
 function openPopup(){
-    nameFormElement.value = document.querySelector('.profile__name').textContent;
-    jobFormElement.value = document.querySelector('.profile__occupation').textContent;
+    nameFormPopupElement.value = nameElement.textContent;
+    jobFormEPopuplement.value = jobElement.textContent;
     popupElement.classList.remove('popup_disabled');
 }
 
@@ -19,8 +20,8 @@ function closePopup(){
 
 function formSubmitHandler (evt) {
     evt.preventDefault();
-    document.querySelector('.profile__name').textContent = nameFormElement.value;
-    document.querySelector('.profile__occupation').textContent = jobFormElement.value;
+    nameElement.textContent = nameFormPopupElement.value;
+    jobElement.textContent = jobFormEPopuplement.value;
     closePopup()
 }
 
