@@ -3,7 +3,7 @@ const editButton = document.querySelector('.profile__edit-button');
 const closePopupButton = popupElement.querySelector('.popup__close');
 const nameFormPopupElement = popupElement.querySelector('#name');
 const jobFormEPopuplement = popupElement.querySelector('#job');
-const submitFrom = popupElement.querySelector('.popup__submit');
+const submitFrom = popupElement.querySelector('.popup__form');
 
 const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__occupation');
@@ -11,11 +11,11 @@ const jobElement = document.querySelector('.profile__occupation');
 function openPopup(){
     nameFormPopupElement.value = nameElement.textContent;
     jobFormEPopuplement.value = jobElement.textContent;
-    popupElement.classList.remove('popup_disabled');
+    popupElement.setAttribute('style', 'display:flex');
 }
 
 function closePopup(){
-    popupElement.classList.add('popup_disabled');
+    popupElement.setAttribute('style', 'display:none');
 }
 
 function formSubmitHandler (evt) {
@@ -27,4 +27,4 @@ function formSubmitHandler (evt) {
 
 editButton.addEventListener('click', openPopup);
 closePopupButton.addEventListener('click', closePopup);
-submitFrom.addEventListener('click', formSubmitHandler);
+submitFrom.addEventListener('submit', formSubmitHandler);

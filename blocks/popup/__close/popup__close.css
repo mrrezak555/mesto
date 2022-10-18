@@ -9,6 +9,7 @@
     height: 32px;
     transition: opacity 0.1s linear;
     background-repeat: no-repeat;
+    cursor: pointer;
 }
 
 

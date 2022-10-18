@@ -10,6 +10,7 @@
     border: none;
     color: white;
     transition: opacity 0.1s linear;
+    cursor: pointer;
 }
 
 .popup__submit:hover{
@@ -20,7 +21,6 @@
     .popup__submit{
         margin: 45px 0 25px 0;
         height: 46px;
-        font-weight: 400;
         font-size: 14px;
         line-height: 17px;
     }
