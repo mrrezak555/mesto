@@ -11,11 +11,11 @@ const jobElement = document.querySelector('.profile__occupation');
 function openPopup(){
     nameFormPopupElement.value = nameElement.textContent;
     jobFormEPopuplement.value = jobElement.textContent;
-    popupElement.setAttribute('style', 'display:flex');
+    popupElement.classList.add('popup_opened');
 }
 
 function closePopup(){
-    popupElement.setAttribute('style', 'display:none');
+    popupElement.classList.remove('popup_opened');
 }
 
 function formSubmitHandler (evt) {
