@@ -8,6 +8,7 @@
     transition: opacity 0.1s linear;
     margin-top: 6px;
     cursor: pointer;
+    background-repeat: no-repeat;
 }
 
 .profile__edit-button:hover {
