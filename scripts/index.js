@@ -1,17 +1,17 @@
-const popupElement = document.querySelector('.popup');
+const popupElementEdit = document.querySelector('#popupEdit');
 const popupAddElement = document.querySelector('#addPopup');
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const closePopupButton = popupElement.querySelector('.popup__close');
-const closeAddPopupButton = popupAddElement.querySelector('#close_button');
+const popupButtonClose = popupElementEdit.querySelector('.popup__close');
+const popupButtonClosseForAdd = popupAddElement.querySelector('#close_button');
 
-const nameFormPopupElement = popupElement.querySelector('#name');
-const jobFormEPopuplement = popupElement.querySelector('#job');
+const nameFormPopupElement = popupElementEdit.querySelector('#name');
+const jobFormEPopuplement = popupElementEdit.querySelector('#job');
 const newNamePopupCard =  popupAddElement.querySelector('#new_name');
 const newImagePopupCard =  popupAddElement.querySelector('#new_image');
 
 
-const submitFrom = popupElement.querySelector('.popup__form');
+const submitFromForEditPopup = popupElementEdit.querySelector('.popup__form');
 const submitFromAddPopup = popupAddElement.querySelector('#submitAddPopup');
 
 const nameElement = document.querySelector('.profile__name');
@@ -20,6 +20,8 @@ const jobElement = document.querySelector('.profile__occupation');
 //Фото попап
 const popupElementPhoto = document.querySelector('#photoPopup');
 const closePopupElementPhoto = popupElementPhoto.querySelector('.popup__close');
+const popupImage = popupElementPhoto.querySelector('.popup__image');
+const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
 
 const initialCards = [
     {
@@ -81,57 +83,62 @@ function addCard(cardName, cardLink) {
 }
 
 function setPopupPhotoValue(srcIn, nameIn){
-  const popupImage = popupElementPhoto.querySelector('.popup__image');
-  const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
-
   popupImage.src = srcIn;
   popupImage.alt = nameIn;
   popupSubtitle.textContent = nameIn;
 }
 
+function setPopupEditValues(){
+  nameFormPopupElement.value = nameElement.textContent;
+  jobFormEPopuplement.value = jobElement.textContent;
+}
+
 function openPopup(popupItem){
   popupItem.classList.add('popup_opened');
-  if (popupItem == popupElement) {
-    nameFormPopupElement.value = nameElement.textContent;
-    jobFormEPopuplement.value = jobElement.textContent;
-  }
 }
 
 function closePopup(popupItem){
   popupItem.classList.remove('popup_opened');
 }
 
-function formSubmitHandler (popupItem) {
-    if (popupItem == popupElement){
-      nameElement.textContent = nameFormPopupElement.value;
-      jobElement.textContent = jobFormEPopuplement.value;
-    }
-    else if (popupItem == popupAddElement) {
-      addCard(newNamePopupCard.value, newImagePopupCard.value);
-    }
-    closePopup(popupItem);
+function handleFormSubmitPopupAdd () {
+  addCard(newNamePopupCard.value, newImagePopupCard.value);
+  closePopup(popupAddElement);
+}
+
+function handleFormSubmitPopupEdit (){
+  nameElement.textContent = nameFormPopupElement.value;
+  jobElement.textContent = jobFormEPopuplement.value;
+  closePopup(popupElementEdit);
+}
+
+function clearFildsOfPopup (popupItem) {
+  newNamePopupCard.value = '';
+  newImagePopupCard.value = '';
 }
 
 editButton.addEventListener('click', () => {
-  openPopup(popupElement);
+  setPopupEditValues();
+  openPopup(popupElementEdit);
 });
-closePopupButton.addEventListener('click', () => {
-  closePopup(popupElement);
+popupButtonClose.addEventListener('click', () => {
+  closePopup(popupElementEdit);
 });
-submitFrom.addEventListener('submit', (evt) => {
+submitFromForEditPopup.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  formSubmitHandler(popupElement);
+  handleFormSubmitPopupEdit();
 });
 
 addButton.addEventListener('click', () => {
+  clearFildsOfPopup(popupAddElement);
   openPopup(popupAddElement);
 });
-closeAddPopupButton.addEventListener('click', () => {
+popupButtonClosseForAdd.addEventListener('click', () => {
   closePopup(popupAddElement);
 });
 submitFromAddPopup.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  formSubmitHandler(popupAddElement);
+  handleFormSubmitPopupAdd();
 });
 
 closePopupElementPhoto.addEventListener('click', () => {
