@@ -95,10 +95,13 @@ function setPopupEditValues(){
 
 function openPopup(popupItem){
   popupItem.classList.add('popup_opened');
+  checkSubmitButtomOpeningPopup(popupItem, selectors);
+  document.addEventListener("keydown", closePopupByClickOnEsc);
 }
 
 function closePopup(popupItem){
   popupItem.classList.remove('popup_opened');
+  resetErrorMessage(popupItem, selectors);
 }
 
 function handleFormSubmitPopupAdd () {
@@ -143,4 +146,33 @@ submitFromAddPopup.addEventListener('submit', (evt) => {
 
 closePopupElementPhoto.addEventListener('click', () => {
   closePopup(popupElementPhoto);
+});
+
+enableValidation(selectors);
+
+const closePopupByClickOnOverlay = (event, popupElement) =>{
+  if (event.target === event.currentTarget){
+    closePopup(popupElement);
+  }
+};
+
+const closePopupByClickOnEsc = (evt) =>{
+  if (evt.key === 'Escape'){
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
+  }
+};
+
+const popupElements = document.querySelectorAll('.popup');
+
+popupElements.forEach(popupElement => {
+  console.log(popupElement);
+  popupElement.addEventListener('keydown', function(evt){
+    if (evt.key === 'Escape'){
+      closePopup(popupElement);
+    }
+  })
+  popupElement.addEventListener('click', (evt) => {
+    closePopupByClickOnOverlay(evt, popupElement);
+  })
 });

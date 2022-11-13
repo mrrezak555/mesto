@@ -9,9 +9,6 @@
     box-sizing: border-box;
 }
 
-.popup__input:first-child{
-    margin-bottom: 30px;
-}
 
 .popup__input::placeholder {
     font-weight: 400;
