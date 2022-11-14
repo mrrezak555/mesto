@@ -1,3 +1,4 @@
+/*Добрый день! У меня никаких ошибок в консоли нет (в разных браузерах тестил)*/
 const popupElementEdit = document.querySelector('#popupEdit');
 const popupAddElement = document.querySelector('#addPopup');
 const editButton = document.querySelector('.profile__edit-button');
@@ -102,6 +103,7 @@ function openPopup(popupItem){
 function closePopup(popupItem){
   popupItem.classList.remove('popup_opened');
   resetErrorMessage(popupItem, selectors);
+  document.removeEventListener("keydown", closePopupByClickOnEsc);
 }
 
 function handleFormSubmitPopupAdd () {
@@ -166,7 +168,6 @@ const closePopupByClickOnEsc = (evt) =>{
 const popupElements = document.querySelectorAll('.popup');
 
 popupElements.forEach(popupElement => {
-  console.log(popupElement);
   popupElement.addEventListener('keydown', function(evt){
     if (evt.key === 'Escape'){
       closePopup(popupElement);
