@@ -1,8 +1,8 @@
 /*Добрый день! У меня никаких ошибок в консоли нет (в разных браузерах тестил)*/
 const popupElementEdit = document.querySelector('#popupEdit');
 const popupAddElement = document.querySelector('#addPopup');
-const editButton = document.querySelector('.profile__edit-button');
-const addButton = document.querySelector('.profile__add-button');
+const popupProfileOpenButton = document.querySelector('.profile__edit-button');
+const popupAddCardButton = document.querySelector('.profile__add-button');
 const popupButtonClose = popupElementEdit.querySelector('.popup__close');
 const popupButtonClosseForAdd = popupAddElement.querySelector('#close_button');
 
@@ -12,44 +12,17 @@ const newNamePopupCard =  popupAddElement.querySelector('#new_name');
 const newImagePopupCard =  popupAddElement.querySelector('#new_image');
 
 
-const submitFromForEditPopup = popupElementEdit.querySelector('.popup__form');
-const submitFromAddPopup = popupAddElement.querySelector('#submitAddPopup');
+const submittionFromForEditPopup = popupElementEdit.querySelector('.popup__form');
+const submittionFromAddPopup = popupAddElement.querySelector('#submitAddPopup');
 
 const nameElement = document.querySelector('.profile__name');
 const jobElement = document.querySelector('.profile__occupation');
 
 //Фото попап
 const popupElementPhoto = document.querySelector('#photoPopup');
-const closePopupElementPhoto = popupElementPhoto.querySelector('.popup__close');
+const popupElementPhotoClose = popupElementPhoto.querySelector('.popup__close');
 const popupImage = popupElementPhoto.querySelector('.popup__image');
 const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
-
-const initialCards = [
-    {
-      name: 'Архыз',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-      name: 'Челябинская область',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-      name: 'Иваново',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-      name: 'Камчатка',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-      name: 'Холмогорский район',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-      name: 'Байкал',
-      link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
 
 // создали шаблон карточки
 const cardTemplate = document.querySelector('#card').content;
@@ -59,10 +32,11 @@ const gridElement = document.querySelector('.grid');
 
 // Пробежимся по массиву и зададим атрибуты
 for (let i = 0; i < initialCards.length; i++){
-    addCard(initialCards[i].name, initialCards[i].link)
+  const cardItem = createCard(initialCards[i].name, initialCards[i].link)
+  addCard(cardItem, gridElement);
   }
 
-function addCard(cardName, cardLink) {
+function createCard(cardName, cardLink) {
   const cardElement = cardTemplate.querySelector('.grid__item').cloneNode(true);
   const cardImage = cardElement.querySelector('.grid__image')
   cardImage.src = cardLink;
@@ -80,8 +54,12 @@ function addCard(cardName, cardLink) {
     setPopupPhotoValue(cardLink, cardName);
     openPopup(popupElementPhoto);
   })
-  gridElement.prepend(cardElement);
+  return cardElement;
 }
+
+function addCard(card, container) {
+  container.prepend(card);
+} 
 
 function setPopupPhotoValue(srcIn, nameIn){
   popupImage.src = srcIn;
@@ -96,22 +74,20 @@ function setPopupEditValues(){
 
 function openPopup(popupItem){
   popupItem.classList.add('popup_opened');
-  checkSubmitButtomOpeningPopup(popupItem, selectors);
   document.addEventListener("keydown", closePopupByClickOnEsc);
 }
 
 function closePopup(popupItem){
   popupItem.classList.remove('popup_opened');
-  resetErrorMessage(popupItem, selectors);
   document.removeEventListener("keydown", closePopupByClickOnEsc);
 }
 
-function handleFormSubmitPopupAdd () {
-  addCard(newNamePopupCard.value, newImagePopupCard.value);
+function submitCardForm () {
+  addCard(createCard(newNamePopupCard.value, newImagePopupCard.value),gridElement);
   closePopup(popupAddElement);
 }
 
-function handleFormSubmitPopupEdit (){
+function submitProfileForm (){
   nameElement.textContent = nameFormPopupElement.value;
   jobElement.textContent = jobFormEPopuplement.value;
   closePopup(popupElementEdit);
@@ -122,31 +98,35 @@ function clearFildsOfPopup (popupItem) {
   newImagePopupCard.value = '';
 }
 
-editButton.addEventListener('click', () => {
+popupProfileOpenButton.addEventListener('click', () => {
   setPopupEditValues();
   openPopup(popupElementEdit);
+  checkSubmitButtomOpeningPopup(popupElementEdit, selectors);
+  resetErrorMessage(popupElementEdit, selectors);
 });
 popupButtonClose.addEventListener('click', () => {
   closePopup(popupElementEdit);
 });
-submitFromForEditPopup.addEventListener('submit', (evt) => {
+submittionFromForEditPopup.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  handleFormSubmitPopupEdit();
+  submitProfileForm();
 });
 
-addButton.addEventListener('click', () => {
+popupAddCardButton.addEventListener('click', () => {
   clearFildsOfPopup(popupAddElement);
   openPopup(popupAddElement);
+  checkSubmitButtomOpeningPopup(popupAddElement, selectors);
 });
 popupButtonClosseForAdd.addEventListener('click', () => {
   closePopup(popupAddElement);
+  resetErrorMessage(popupAddElement, selectors);
 });
-submitFromAddPopup.addEventListener('submit', (evt) => {
+submittionFromAddPopup.addEventListener('submit', (evt) => {
   evt.preventDefault();
-  handleFormSubmitPopupAdd();
+  submitCardForm();
 });
 
-closePopupElementPhoto.addEventListener('click', () => {
+popupElementPhotoClose.addEventListener('click', () => {
   closePopup(popupElementPhoto);
 });
 
@@ -168,11 +148,6 @@ const closePopupByClickOnEsc = (evt) =>{
 const popupElements = document.querySelectorAll('.popup');
 
 popupElements.forEach(popupElement => {
-  popupElement.addEventListener('keydown', function(evt){
-    if (evt.key === 'Escape'){
-      closePopup(popupElement);
-    }
-  })
   popupElement.addEventListener('click', (evt) => {
     closePopupByClickOnOverlay(evt, popupElement);
   })
