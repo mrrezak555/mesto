@@ -1,4 +1,6 @@
-/*Добрый день! У меня никаких ошибок в консоли нет (в разных браузерах тестил)*/
+import {Card} from './Card.js';
+import {FormValidator, selectors} from './FormValidator.js';
+import {initialCards} from './cards.js'
 const popupElementEdit = document.querySelector('#popupEdit');
 const popupAddElement = document.querySelector('#addPopup');
 const popupProfileOpenButton = document.querySelector('.profile__edit-button');
@@ -24,38 +26,19 @@ const popupElementPhotoClose = popupElementPhoto.querySelector('.popup__close');
 const popupImage = popupElementPhoto.querySelector('.popup__image');
 const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
 
+
+const form1 = new FormValidator(selectors, document.querySelector('.popup__form'));
+form1.enableValidation();
+
+const form2 = new FormValidator(selectors, document.querySelector('#submitAddPopup'));
+form2.enableValidation();
+
 // создали шаблон карточки
 const cardTemplate = document.querySelector('#card').content;
 
 // Выбираем куда вставлять будем 
 const gridElement = document.querySelector('.grid');
 
-// Пробежимся по массиву и зададим атрибуты
-for (let i = 0; i < initialCards.length; i++){
-  const cardItem = createCard(initialCards[i].name, initialCards[i].link)
-  addCard(cardItem, gridElement);
-  }
-
-function createCard(cardName, cardLink) {
-  const cardElement = cardTemplate.querySelector('.grid__item').cloneNode(true);
-  const cardImage = cardElement.querySelector('.grid__image')
-  cardImage.src = cardLink;
-  cardImage.alt = cardName;
-  cardElement.querySelector('.grid__title').textContent = cardName;
-  const likeTemple = cardElement.querySelector('.grid__like');
-  const trashButton = cardElement.querySelector('.grid__trash')
-  likeTemple.addEventListener('click', () => {
-    likeTemple.classList.toggle('grid__like_active');
-  })
-  trashButton.addEventListener('click', () => {
-    trashButton.closest('.grid__item').remove();
-  })
-  cardImage.addEventListener('click', () => {
-    setPopupPhotoValue(cardLink, cardName);
-    openPopup(popupElementPhoto);
-  })
-  return cardElement;
-}
 
 function addCard(card, container) {
   container.prepend(card);
@@ -83,7 +66,9 @@ function closePopup(popupItem){
 }
 
 function submitCardForm () {
-  addCard(createCard(newNamePopupCard.value, newImagePopupCard.value),gridElement);
+  //addCard(createCard(newNamePopupCard.value, newImagePopupCard.value),gridElement);
+  const cardItem = new Card({name: `${newNamePopupCard.value}`, link: `${newImagePopupCard.value}`}, '#card')
+  addCard(cardItem.generateCard(), gridElement);
   closePopup(popupAddElement);
 }
 
@@ -101,8 +86,8 @@ function clearFildsOfPopup (popupItem) {
 popupProfileOpenButton.addEventListener('click', () => {
   setPopupEditValues();
   openPopup(popupElementEdit);
-  checkSubmitButtomOpeningPopup(popupElementEdit, selectors);
-  resetErrorMessage(popupElementEdit, selectors);
+  form1.checkSubmitButtomOpeningPopup();
+  form1.resetErrorMessage();
 });
 popupButtonClose.addEventListener('click', () => {
   closePopup(popupElementEdit);
@@ -115,11 +100,11 @@ submittionFromForEditPopup.addEventListener('submit', (evt) => {
 popupAddCardButton.addEventListener('click', () => {
   clearFildsOfPopup(popupAddElement);
   openPopup(popupAddElement);
-  checkSubmitButtomOpeningPopup(popupAddElement, selectors);
+  form2.checkSubmitButtomOpeningPopup();
 });
 popupButtonClosseForAdd.addEventListener('click', () => {
   closePopup(popupAddElement);
-  resetErrorMessage(popupAddElement, selectors);
+  form2.resetErrorMessage();
 });
 submittionFromAddPopup.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -130,7 +115,7 @@ popupElementPhotoClose.addEventListener('click', () => {
   closePopup(popupElementPhoto);
 });
 
-enableValidation(selectors);
+//enableValidation(selectors);
 
 const closePopupByClickOnOverlay = (event, popupElement) =>{
   if (event.target === event.currentTarget){
@@ -152,3 +137,13 @@ popupElements.forEach(popupElement => {
     closePopupByClickOnOverlay(evt, popupElement);
   })
 });
+
+initialCards.forEach((item) => {
+  const card = new Card(item, '#card');
+  const cardElement = card.generateCard();
+
+  // Добавляем в DOM
+  document.querySelector('.grid').append(cardElement);
+});
+
+export {openPopup};

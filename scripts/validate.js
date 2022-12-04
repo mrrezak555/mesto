@@ -1,4 +1,4 @@
-const showInputError = (errorElement, errorMessage, inputElement, selectors) => {
+/*const showInputError = (errorElement, errorMessage, inputElement, selectors) => {
     errorElement.textContent = errorMessage;
     errorElement.classList.add(selectors.errorClass);
     inputElement.classList.add(selectors.inputErrorClass);
@@ -78,4 +78,4 @@ function checkSubmitButtomOpeningPopup (popupElement, selectors) {
     const popupSubmit = popupElement.querySelector(selectors.submitButtonSelector);
     toggleButtonState(inputElements, popupSubmit, selectors);
 }
-
+*/
