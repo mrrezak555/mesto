@@ -146,7 +146,7 @@ popupElements.forEach(popupElement => {
 initialCards.forEach((item) => {
   const cardElement = createCard(item);
   // Добавляем в DOM
-  document.querySelector('.grid').append(cardElement);
+  gridElement.append(cardElement);
 });
 
 export {openPopup};
