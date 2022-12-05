@@ -6,7 +6,6 @@ const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
 import {openPopup} from "./index.js"; 
 
 class Card {
-    static gridElement = document.querySelector('.grid');
 
     constructor(data, template) {
         this._link = data.link;
@@ -23,8 +22,8 @@ class Card {
         evt.target.classList.toggle('grid__like_active');
     }
 
-    _deleteItem(elementCard) {
-        elementCard.remove();
+    _deleteItem() {
+        this._element.remove();
     }
 
     _setPopupPhotoValue() {
@@ -42,7 +41,7 @@ class Card {
             this._deleteItem(this._element);
         });
 
-        this._element.querySelector('.grid__image').addEventListener('click', () => {
+        this._image.addEventListener('click', () => {
             this._setPopupPhotoValue();
             openPopup(popupElementPhoto);
         });
@@ -52,9 +51,10 @@ class Card {
         // Запишем разметку в приватное поле _element. 
         // Так у других элементов появится доступ к ней.
         this._element = this._getTemplate();
+        this._image = this._element.querySelector('.grid__image');
         this._setEventListeners();
         // Добавим данные
-        this._element.querySelector('.grid__image').src = this._link;
+        this._image.src = this._link;
         this._element.querySelector('.grid__title').textContent = this._name;
         this._element.querySelector('.grid__title').alt = this._name;
         // Вернём элемент наружу

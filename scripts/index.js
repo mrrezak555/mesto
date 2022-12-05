@@ -27,11 +27,11 @@ const popupImage = popupElementPhoto.querySelector('.popup__image');
 const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
 
 
-const form1 = new FormValidator(selectors, document.querySelector('.popup__form'));
-form1.enableValidation();
+const profileFormValidator = new FormValidator(selectors, document.querySelector('.popup__form'));
+profileFormValidator.enableValidation();
 
-const form2 = new FormValidator(selectors, document.querySelector('#submitAddPopup'));
-form2.enableValidation();
+const cardFormValidator = new FormValidator(selectors, document.querySelector('#submitAddPopup'));
+cardFormValidator.enableValidation();
 
 // создали шаблон карточки
 const cardTemplate = document.querySelector('#card').content;
@@ -65,10 +65,15 @@ function closePopup(popupItem){
   document.removeEventListener("keydown", closePopupByClickOnEsc);
 }
 
+function createCard(item) {
+  const cardElement = new Card(item, '#card')
+return cardElement.generateCard();
+}
+
 function submitCardForm () {
   //addCard(createCard(newNamePopupCard.value, newImagePopupCard.value),gridElement);
-  const cardItem = new Card({name: `${newNamePopupCard.value}`, link: `${newImagePopupCard.value}`}, '#card')
-  addCard(cardItem.generateCard(), gridElement);
+  const cardItem = createCard({name: `${newNamePopupCard.value}`, link: `${newImagePopupCard.value}`});
+  addCard(cardItem, gridElement);
   closePopup(popupAddElement);
 }
 
@@ -86,8 +91,8 @@ function clearFildsOfPopup (popupItem) {
 popupProfileOpenButton.addEventListener('click', () => {
   setPopupEditValues();
   openPopup(popupElementEdit);
-  form1.checkSubmitButtomOpeningPopup();
-  form1.resetErrorMessage();
+  profileFormValidator.checkSubmitButtomOpeningPopup();
+  profileFormValidator.resetErrorMessage();
 });
 popupButtonClose.addEventListener('click', () => {
   closePopup(popupElementEdit);
@@ -100,11 +105,11 @@ submittionFromForEditPopup.addEventListener('submit', (evt) => {
 popupAddCardButton.addEventListener('click', () => {
   clearFildsOfPopup(popupAddElement);
   openPopup(popupAddElement);
-  form2.checkSubmitButtomOpeningPopup();
+  cardFormValidator.checkSubmitButtomOpeningPopup();
+  cardFormValidator.resetErrorMessage();
 });
 popupButtonClosseForAdd.addEventListener('click', () => {
   closePopup(popupAddElement);
-  form2.resetErrorMessage();
 });
 submittionFromAddPopup.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -139,9 +144,7 @@ popupElements.forEach(popupElement => {
 });
 
 initialCards.forEach((item) => {
-  const card = new Card(item, '#card');
-  const cardElement = card.generateCard();
-
+  const cardElement = createCard(item);
   // Добавляем в DOM
   document.querySelector('.grid').append(cardElement);
 });
