@@ -56,7 +56,7 @@ class Card {
         // Добавим данные
         this._image.src = this._link;
         this._element.querySelector('.grid__title').textContent = this._name;
-        this._element.querySelector('.grid__title').alt = this._name;
+        this._image.alt = this._name;
         // Вернём элемент наружу
         return this._element;
     }
