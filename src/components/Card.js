@@ -3,14 +3,13 @@ const popupElementPhoto = document.querySelector('#photoPopup');
 const popupImage = popupElementPhoto.querySelector('.popup__image');
 const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
 
-import {openPopup} from "./index.js"; 
-
 class Card {
 
-    constructor(data, template) {
+    constructor(data, template, handleCardClick ) {
         this._link = data.link;
         this._name = data.name;
         this._template = template;
+        this._handleCardClick = handleCardClick; 
     }
 
     _getTemplate() {
@@ -43,7 +42,8 @@ class Card {
 
         this._image.addEventListener('click', () => {
             this._setPopupPhotoValue();
-            openPopup(popupElementPhoto);
+            //console.log(this._handleCardClick())
+            this._handleCardClick();
         });
     }
 
