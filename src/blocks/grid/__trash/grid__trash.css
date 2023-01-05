@@ -1,7 +1,7 @@
 .grid__trash{
     background: none;
     border: none;
-    background-image: url(../../../../images/Trash.svg);
+    background-image: url(../../../images/Trash.svg);
     background-repeat: no-repeat;
     width: 18px;
     height: 19.3px;

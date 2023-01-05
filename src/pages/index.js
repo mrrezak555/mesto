@@ -6,7 +6,7 @@ import PopupWithImage from '../components/PopupWithImage.js'
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
 import {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose} from '../utils/constants.js';
-//import '../pages/index.css'; // добавить при вебпаке!!!!!!!!!!!!!!!!!!
+import './index.css';
 
 
 const profileFormValidator = new FormValidator(selectors, document.querySelector('.popup__form'));
