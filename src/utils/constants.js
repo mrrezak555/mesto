@@ -15,4 +15,13 @@ const jobElement = document.querySelector('.profile__occupation');
 const popupElementPhoto = document.querySelector('#photoPopup');
 const popupElementPhotoClose = popupElementPhoto.querySelector('.popup__close');
 
-export {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose};
+const selectors = {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__submit',
+    inactiveButtonClass: 'popup__submit_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+};
+
+export {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose, selectors};

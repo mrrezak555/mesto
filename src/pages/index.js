@@ -1,15 +1,15 @@
 import { Card } from '../components/Card.js';
-import { FormValidator, selectors } from '../components/FormValidator.js';
+import { FormValidator } from '../components/FormValidator.js';
 import { initialCards } from '../utils/cards.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js'
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
-import {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose} from '../utils/constants.js';
+import {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose, selectors} from '../utils/constants.js';
 import './index.css';
 
 
-const profileFormValidator = new FormValidator(selectors, document.querySelector('.popup__form'));
+const profileFormValidator = new FormValidator(selectors, document.querySelector('#popupEdit'));
 profileFormValidator.enableValidation();
 
 const cardFormValidator = new FormValidator(selectors, document.querySelector('#submitAddPopup'));
@@ -40,26 +40,16 @@ const cardList = new Section({
   '.grid'
 );
 
-function setPopupEditValues() {
-  nameFormPopupElement.value = nameElement.textContent;
-  jobFormEPopuplement.value = jobElement.textContent;
-}
-
-
-
 function createCard(item, newFun) {
   const cardElement = new Card(item, '#card', newFun)
   return cardElement.generateCard();
 }
 
-function submitCardForm() {
-  //addCard(createCard(newNamePopupCard.value, newImagePopupCard.value),gridElement);
-  //popupAddCard.close();
-  //console.log(newImagePopupCard.value);
-  const newData =
-  {
-    name: popupAddCard.formValues.name,
-    link: popupAddCard.formValues.job
+function submitCardForm(inputData) {
+  const newData = 
+  { 
+    name: inputData.name,
+    link: inputData.job
   };
   popupAddCard.close();
   const cardaddElement = createCard(newData,
@@ -70,19 +60,13 @@ function submitCardForm() {
   cardList.addItem(cardaddElement);
 }
 
-function submitProfileForm() {
+function submitProfileForm(formValues) {
   /*nameElement.textContent = nameFormPopupElement.value;
   jobElement.textContent = jobFormEPopuplement.value;
   closePopup(popupElementEdit);
   */
   popupEdit.close();
-  //console.log(popupEdit.formValues);
-  cardsInfo.setUserInfo(popupEdit.formValues);
-}
-
-function clearFildsOfPopup(popupItem) {
-  newNamePopupCard.value = '';
-  newImagePopupCard.value = '';
+  cardsInfo.setUserInfo(formValues);
 }
 
 popupProfileOpenButton.addEventListener('click', () => {
@@ -90,15 +74,14 @@ popupProfileOpenButton.addEventListener('click', () => {
   nameFormPopupElement.value = nameProfile;
   jobFormEPopuplement.value = infoProfile;
   popupEdit.open();
-  profileFormValidator.checkSubmitButtomOpeningPopup();
+  profileFormValidator.toggleButtonState();
   profileFormValidator.resetErrorMessage();
 });
 
 
 popupAddCardButton.addEventListener('click', () => {
-  clearFildsOfPopup(popupAddElement);
   popupAddCard.open();
-  cardFormValidator.checkSubmitButtomOpeningPopup();
+  cardFormValidator.toggleButtonState();
   cardFormValidator.resetErrorMessage();
 });
 

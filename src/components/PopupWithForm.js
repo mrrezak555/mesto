@@ -7,31 +7,27 @@ export default class PopupWithForm extends Popup {
         this._callBack = submitCallBack;
         this._inputList = this._popupItem.querySelectorAll('.popup__input');
         this._submitButton = this._popupItem.querySelector('.popup__submit');
-        this.formValues = {};
+        this._form = this._popupItem.querySelector('.popup__form');
     }
 
-    _getInputValues() {
+    getInputValues() {
+        const formValues = {};
         this._inputList.forEach((input) => {
-            //console.log(input);
-            this.formValues[input.name] = input.value;
+            formValues[input.name] = input.value;
         });
-        //console.log(document.querySelector('#new_image').value)
-        return this.formValues;
+        return formValues;
     }
 
     setEventListeners() {
         super.setEventListeners();
-        this._form = this._popupItem.querySelector('.popup__form');
         this._form.addEventListener('submit', (evt) => {
             evt.preventDefault()
-            //console.log(this._form)
-            this._getInputValues();
-            this._callBack();
+            this.getInputValues();
+            this._callBack(this.getInputValues());
         });
     }
     close() {
         super.close();
-        //console.log(this._form)
         this._form.reset();
     }
 }

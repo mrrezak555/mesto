@@ -12,6 +12,12 @@ module.exports = {
         filename: 'main.js'
     },
     mode: 'development',
+    devServer: {
+        static: path.resolve(__dirname, './dist'),
+        compress: true,
+        port: 8181,
+        open: true
+    },
     module: {
         rules: [
             {
@@ -19,7 +25,7 @@ module.exports = {
                 use: [
                     MiniCssExtractPlugin.loader, {
                         loader: 'css-loader',
-                        options: {importLoaders: 1}
+                        options: { importLoaders: 1 }
                     }, 'postcss-loader'
                 ]
             },
@@ -40,5 +46,5 @@ module.exports = {
             template: './src/index.html'
         })
     ],
-    devtool: 'source-map'
+    //devtool: 'source-map'
 }

@@ -1,8 +1,3 @@
-//Фото попап
-const popupElementPhoto = document.querySelector('#photoPopup');
-const popupImage = popupElementPhoto.querySelector('.popup__image');
-const popupSubtitle = popupElementPhoto.querySelector('.popup__subtitle');
-
 class Card {
 
     constructor(data, template, handleCardClick ) {
@@ -17,32 +12,24 @@ class Card {
         return cardElement;
     }
 
-    _likeItem(evt) {
-        evt.target.classList.toggle('grid__like_active');
-    }
+    _likeItem(evt) { 
+        this._buttonLike.classList.toggle('grid__like_active'); 
+    } 
 
     _deleteItem() {
         this._element.remove();
     }
 
-    _setPopupPhotoValue() {
-        popupImage.src = this._link;
-        popupImage.alt = this._name;
-        popupSubtitle.textContent = this._name;
-    }
-
     _setEventListeners() {
-        this._element.querySelector('.grid__like').addEventListener('click', (evt) => {
-            this._likeItem(evt);
-        });
+        this._buttonLike.addEventListener('click', (evt) => { 
+            this._likeItem(evt); 
+       }); 
 
         this._element.querySelector('.grid__trash').addEventListener('click', () => {
             this._deleteItem(this._element);
         });
 
         this._image.addEventListener('click', () => {
-            this._setPopupPhotoValue();
-            //console.log(this._handleCardClick())
             this._handleCardClick();
         });
     }
@@ -52,6 +39,7 @@ class Card {
         // Так у других элементов появится доступ к ней.
         this._element = this._getTemplate();
         this._image = this._element.querySelector('.grid__image');
+        this._buttonLike = this._element.querySelector('.grid__like');
         this._setEventListeners();
         // Добавим данные
         this._image.src = this._link;
