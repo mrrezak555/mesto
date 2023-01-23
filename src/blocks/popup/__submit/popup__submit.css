@@ -10,6 +10,7 @@
     border: none;
     color: white;
     transition: opacity 0.1s linear;
+    max-width: 358px;
     cursor: pointer;
 }
 

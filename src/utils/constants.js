@@ -15,6 +15,8 @@ const jobElement = document.querySelector('.profile__occupation');
 const popupElementPhoto = document.querySelector('#photoPopup');
 const popupElementPhotoClose = popupElementPhoto.querySelector('.popup__close');
 
+const popupChangeAvatarButton = document.querySelector('.profile__button-avatar')
+
 const selectors = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -24,4 +26,4 @@ const selectors = {
     errorClass: 'popup__input-error_active'
 };
 
-export {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose, selectors};
+export {popupElementEdit, popupAddElement, popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, newNamePopupCard, newImagePopupCard, nameElement, jobElement, popupElementPhoto, popupElementPhotoClose, selectors, popupChangeAvatarButton};

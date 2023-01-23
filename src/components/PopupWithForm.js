@@ -6,7 +6,7 @@ export default class PopupWithForm extends Popup {
         super(popupSelector);
         this._callBack = submitCallBack;
         this._inputList = this._popupItem.querySelectorAll('.popup__input');
-        this._submitButton = this._popupItem.querySelector('.popup__submit');
+        this.submitButton = this._popupItem.querySelector('.popup__submit');
         this._form = this._popupItem.querySelector('.popup__form');
     }
 
@@ -21,7 +21,8 @@ export default class PopupWithForm extends Popup {
     setEventListeners() {
         super.setEventListeners();
         this._form.addEventListener('submit', (evt) => {
-            evt.preventDefault()
+            evt.preventDefault();
+            this.submitButton.textContent = 'Сохранение...'
             this._callBack(this.getInputValues());
         });
     }
