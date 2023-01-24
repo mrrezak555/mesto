@@ -25,6 +25,7 @@
 @import url(../blocks/grid/__trash/grid__trash.css);
 @import url(../blocks/grid/__contaner/grid__contaner.css);
 @import url(../blocks/grid/__like-count/grid__like-count.css);
+@import url(../blocks/grid/__trash/__trash_hidden/grid__trash_hidden.css);
 
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__info/footer__info.css);

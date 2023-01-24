@@ -5,7 +5,7 @@ import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js'
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
-import {popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, selectors, popupChangeAvatarButton} from '../utils/constants.js';
+import { popupProfileOpenButton, popupAddCardButton, nameFormPopupElement, jobFormEPopuplement, selectors, popupChangeAvatarButton } from '../utils/constants.js';
 import './index.css';
 import { Api } from '../components/Api.js';
 //import { data } from 'autoprefixer';
@@ -34,7 +34,7 @@ popupChangeAvatarValidator.enableValidation();
 const popupWithImage = new PopupWithImage('#photoPopup');
 const popupDelete = new PopupForDelete('#deletePopup', handleSubmitDeleteCard)
 const popupAddCard = new PopupWithForm('#addPopup', submitCardForm);
-const cardsInfo = new UserInfo({
+const profileInfo = new UserInfo({
   nameSelector: '.profile__name',
   infoSelector: '.profile__occupation',
   avatarProfile: '.profile__avatar',
@@ -60,58 +60,36 @@ const cardList = new Section({
 
 // 1
 api.getUserInfo()
-.then((data) => {
-  cardsInfo.setUserAvatar(data.avatar);
-  cardsInfo.sentToServerInfo({
-    name: data.name,
-    job: data.about
+  .then((data) => {
+    profileInfo.setUserAvatar(data.avatar);
+    profileInfo.setUserInfo({
+      name: data.name,
+      job: data.about
+    })
+    profileInfo.getMyId(data._id)
+
+    //Карточки должны приходить тогда, когда известен ваш id.
+    api.getInitialCards()
+      .then((data) => {
+        cardList.getSectionCards(data);
+        cardList.renderer()
+      })
+      .catch((err) => { console.log(err) });
   })
-  cardsInfo.getMyId(data._id)
-})
-.catch((err) => {console.log(err)});
+  .catch((err) => { console.log(err) });
 
 
 const cardList = new Section({
   renderer: (item) => {
-    //console.log(item)
-    if((item.owner.name === (cardsInfo.getInfo().nameProfile))){
-      const cardElement = createCard(item, '#card_with_trash')
-      const isOwnLike = item.likes.some((myLike) => {
-         return myLike.name === cardsInfo.getInfo().nameProfile;
-      })
-      cardList.addItem(cardElement.generateCard());
-      if( isOwnLike) {
-        cardElement.setLikeActive();
-      }
-    }
-    else {
-      const cardElement = createCard(item, '#card_without_trash');
-      const isOwnLike = item.likes.some((myLike) => {
-        return myLike.name === cardsInfo.getInfo().nameProfile;
-      })
-      cardList.addItem(cardElement.generateCard());
-      if( isOwnLike) {
-        cardElement.setLikeActive();
-      }
-    }
+    const cardElement = createCard(item, profileInfo.myId, '#card');
+    cardList.addItem(cardElement.generateCard());
   }
 },
   '.grid'
 );
 
-//2
-api.getInitialCards()
-.then((data) => {
-  //const initialCards = data.map((item) => {
-    //return {name: item.name, link: item.link, likes: item.likes}
-  //});
-  cardList.getSectionCards(data);
-  cardList.renderer()
-})
-.catch((err) => {console.log(err)});
-
-function createCard(item, templateSelector) {
-  const cardElement = new Card(item, templateSelector, {
+function createCard(item, myId, templateSelector) {
+  const cardElement = new Card(item, myId, templateSelector, {
     handleCardClick: () => {
       popupWithImage.open(item);
     },
@@ -122,75 +100,77 @@ function createCard(item, templateSelector) {
     },
     handleAddLike: (idCard) => {
       api.addLike(idCard)
-      .then((data) => {
-        cardElement.setLikeCount(data.likes.length);
-      })
+        .then((data) => {
+          cardElement.setLikeCount(data.likes.length);
+          cardElement.setLikeActive();
+        })
     },
     handleRemoveLike: (idCard) => {
-      console.log(idCard)
       api.removeLike(idCard)
-      .then((data) => {
-        cardElement.setLikeCount(data.likes.length);
-      })
+        .then((data) => {
+          cardElement.setLikeCount(data.likes.length);
+          cardElement.setLikeDisable()
+        })
     }
   })
   return cardElement;
 }
 
 function submitCardForm(inputData) {
-  const newData = 
-  { 
+  const newData =
+  {
     name: inputData.name,
     link: inputData.job,
   };
   api.addNewCard(newData)
-   .then((data) => {
-    const cardaddElement = createCard(data, '#card_with_trash');
-    cardList.addItem(cardaddElement.generateCard());
-   })
-   .catch((err) => {console.log(err)})
-   .finally(() => {
-    this.submitButton.textContent = 'Создать';
-  });
-  popupAddCard.close();
+    .then((data) => {
+      const cardaddElement = createCard(data, profileInfo.myId, '#card');
+      cardList.addItem(cardaddElement.generateCard());
+      popupAddCard.close();
+    })
+    .catch((err) => { console.log(err) })
+    .finally(() => {
+      this.submitButton.textContent = 'Создать';
+    });
   //const cardaddElement = createCard(data);
   //cardList.addItem(cardaddElement);
 }
 
 function submitProfileForm(formValues) {
-  /*nameElement.textContent = nameFormPopupElement.value;
-  jobElement.textContent = jobFormEPopuplement.value;
-  closePopup(popupElementEdit);
-  */
-  popupEdit.close();
-  cardsInfo.sentToServerInfo(formValues);
+  api.editProfile({ name: formValues.name, about: formValues.job })
+    .then(() => {
+      profileInfo.setUserInfo(formValues);
+      popupEdit.close();
+    })
+    .catch((err) => console.log(err))
 }
 
-function handleSubmitDeleteCard(){
- api.deleteCard()
- .then(() =>{
-  popupDelete.close();
-  this.card.deleteItem();
- })
- .catch((err) => {console.log(err)})
+function handleSubmitDeleteCard() {
+  api.deleteCard()
+    .then(() => {
+      popupDelete.close();
+      this.card.deleteItem();
+    })
+    .catch((err) => { console.log(err) })
 }
 
-function handleSubmitChangeCard(){
-  api.changeAvatar(popupChangeAvatar.getInputValues().avatar)
-   .then(() =>{
-    cardsInfo.setUserAvatar(popupChangeAvatar.getInputValues().avatar);
-    popupChangeAvatar.close()
-   })
-   .catch((err) => {
-    console.log(`Ошибка. Запрос не выполнен ${err}`);  
-  })
-  .finally(() => {
-    this.submitButton.textContent = 'Сохранить';
-  });
+function handleSubmitChangeCard() {
+  const myAvatar = popupChangeAvatar.getInputValues().avatar;
+  api.changeAvatar(myAvatar)
+    .then(() => {
+      profileInfo.setUserAvatar(myAvatar);
+      popupChangeAvatar.close()
+    })
+    .catch((err) => {
+      console.log(`Ошибка. Запрос не выполнен ${err}`);
+    })
+    .finally(() => {
+      this.submitButton.textContent = 'Сохранить';
+    });
 }
 
 popupProfileOpenButton.addEventListener('click', () => {
-  const { nameProfile, infoProfile} = cardsInfo.getInfo();
+  const { nameProfile, infoProfile } = profileInfo.getInfo();
   nameFormPopupElement.value = nameProfile;
   jobFormEPopuplement.value = infoProfile;
   popupEdit.open();

@@ -14,7 +14,7 @@ export default class UserInfo {
         this.myId = id;
     }
 
-    _setUserInfo(inputValue){ 
+    setUserInfo(inputValue){ 
         this._nameProfile.textContent = inputValue.name; 
         this._infoProfile.textContent = inputValue.job;
         //this._sentToServerInfo(inputValue);
@@ -22,12 +22,5 @@ export default class UserInfo {
 
     setUserAvatar(avataLink){
         this._avatarProfile.src = avataLink;
-    }
-
-    sentToServerInfo(inputValue){
-        this._api
-         .editProfile({name: inputValue.name, about: inputValue.job})
-         .then(this._setUserInfo(inputValue))
-         .catch((err) => console.log(err))
     }
 }
